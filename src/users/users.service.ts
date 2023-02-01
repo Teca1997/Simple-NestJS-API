@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,23 +12,55 @@ export class UsersService {
     private userRepo: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    await this.checkEmailAvilable(createUserDto.email);
+    await this.checkUsernameAvilable(createUserDto.username);
+    const { password, ...userWithoutPassword } = await this.userRepo.save(
+      createUserDto,
+    );
+    return userWithoutPassword;
   }
 
-  findAll() {
-    return this.userRepo.find();
+  async findAll() {
+    return await this.userRepo.find();
   }
 
-  findOne(id: number) {
-    return this.userRepo.findBy({ id });
+  async findOneById(id: number) {
+    const { password, ...userWithoutPassword } = (
+      await this.userRepo.findBy({ id })
+    )[0];
+    if (userWithoutPassword === undefined) {
+      throw new NotFoundException(`User with ID ${id} was not found`);
+    }
+    return userWithoutPassword;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.checkEmailAvilable(updateUserDto.email);
+    await this.checkUsernameAvilable(updateUserDto.username);
+    await this.findOneById(id);
+    await this.userRepo.update(id, updateUserDto);
+    return await this.findOneById(id);
   }
 
-  remove(id: number) {
-    return this.userRepo.delete(id);
+  async remove(id: number) {
+    await this.findOneById(id);
+    return await this.userRepo.delete(id);
+  }
+
+  async checkUsernameAvilable(username: string): Promise<void> {
+    if ((await this.userRepo.findBy({ username }))[0] !== undefined) {
+      throw new NotFoundException(
+        `User with usernme ${username} already exists`,
+      );
+    }
+    return;
+  }
+
+  async checkEmailAvilable(email: string): Promise<void> {
+    if ((await this.userRepo.findBy({ email }))[0] !== undefined) {
+      throw new NotFoundException(`User with email ${email} already exists`);
+    }
+    return;
   }
 }
