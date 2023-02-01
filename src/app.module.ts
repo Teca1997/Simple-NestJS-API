@@ -1,5 +1,6 @@
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { Role } from './roles/entities/role.entity';
 import { RolesModule } from './roles/roles.module';
@@ -14,6 +15,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     RolesModule,
     TokensModule,
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || '127.0.0.1',
