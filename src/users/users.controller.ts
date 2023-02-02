@@ -1,29 +1,10 @@
-import { faker } from '@faker-js/faker';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes';
-import {
-  ApiBadRequestResponse,
-  ApiBody,
-  ApiConflictResponse,
-  ApiCreatedResponse,
-  ApiNotFoundResponse,
-  ApiOkResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleEnum } from '../enums/roles.enum';
-import { Roles } from '../roles/roles.decorator';
-import { RolesGuard } from '../roles/roles.guard';
+import { Roles } from '../roles/decorators/roles.decorator';
+import { RolesGuard } from '../roles/guards/roles.guard';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UsersService } from './users.service';
@@ -35,62 +16,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
-  @ApiBody({
-    type: CreateUserDTO,
-    examples: {
-      CREATED: {
-        description: 'Creates a new user',
-        value: {
-          username: faker.internet.userName(),
-          email: faker.internet.email(),
-          password: 'password',
-        },
-      },
-      BAD_REQUEST_1: {
-        description:
-          'Returns bad request as username was not passed or is of wrong format.',
-        value: {
-          email: faker.internet.email(),
-          password: 'password',
-        },
-      },
-      BAD_REQUEST_2: {
-        description:
-          'Returns bad request as email was not passed or is of wrong format.',
-        value: {
-          username: faker.internet.userName(),
-          password: 'password',
-        },
-      },
-      BAD_REQUEST_3: {
-        description:
-          'Returns bad request as password was not passed or is of wrong format.',
-        value: {
-          username: faker.internet.userName(),
-          email: faker.internet.email(),
-        },
-      },
-      CONFLICT_1: {
-        description: 'Returns conflict as username is already used',
-        value: {
-          username: 'admin',
-          email: 'admin@admin.com',
-          password: 'password',
-        },
-      },
-      CONFLICT_2: {
-        description: 'Returns conflict as email already used',
-        value: {
-          username: 'admin',
-          email: 'admin@admin.com',
-          password: 'password',
-        },
-      },
-    },
-  })
-  @ApiCreatedResponse()
-  @ApiBadRequestResponse()
-  @ApiConflictResponse()
+  @ApiBody({ type: CreateUserDTO })
   async create(@Body() createUserDto: CreateUserDTO) {
     return await this.usersService.create(createUserDto);
   }

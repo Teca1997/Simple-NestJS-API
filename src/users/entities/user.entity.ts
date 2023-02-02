@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import type { Moment } from 'moment';
 import { Role } from '../../roles/entities/role.entity';
@@ -13,13 +7,7 @@ import { Token } from '../../tokens/entities/token.entity';
 
 @Entity({ schema: process.env.DB_SCHEMA || 'public' })
 export class User extends TimestampEntity {
-  constructor(
-    username: string,
-    email: string,
-    password: string,
-    role: number | Role,
-    verifierDate: Moment,
-  ) {
+  constructor(username: string, email: string, password: string, role: number | Role, verifierDate: Moment) {
     super();
     this.username = username;
     this.email = email;

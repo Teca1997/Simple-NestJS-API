@@ -14,15 +14,7 @@ export class seed1673393951184 implements MigrationInterface {
       queryRunner.manager.save(new Token(token.token, token.user));
     }); */
     UserSeed.forEach((user) => {
-      queryRunner.manager.save(
-        new User(
-          user.username,
-          user.email,
-          user.password,
-          user.role!,
-          user.verifiedDate!,
-        ),
-      );
+      queryRunner.manager.save(new User(user.username, user.email, user.password, user.role!, user.verifiedDate!));
     });
   }
 

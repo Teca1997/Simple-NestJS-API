@@ -1,11 +1,6 @@
 import * as moment from 'moment';
 
-import {
-  EntitySubscriberInterface,
-  EventSubscriber,
-  ObjectLiteral,
-  UpdateEvent,
-} from 'typeorm';
+import { EntitySubscriberInterface, EventSubscriber, ObjectLiteral, UpdateEvent } from 'typeorm';
 
 import { User } from '../../users/entities/user.entity';
 
@@ -25,5 +20,7 @@ const updateVerifiedDate = async (user: ObjectLiteral) => {
   console.log(user);
   if (user.role > 1) {
     user.verifiedDate = moment();
+  } else {
+    user.verifiedDate = null;
   }
 };

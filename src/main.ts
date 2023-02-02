@@ -22,10 +22,6 @@ async function bootstrap() {
 
   await app.listen(3000);
 
-  console.log(
-    greenBright(
-      `Server listening at http://localhost:${port} as ${process.env.NODE_ENV}`,
-    ),
-  );
+  console.log(greenBright(`Server listening at http://localhost:${port} as ${process.env.NODE_ENV}`));
 }
 bootstrap();

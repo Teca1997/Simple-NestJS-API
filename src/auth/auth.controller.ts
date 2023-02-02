@@ -11,10 +11,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private authService: AuthService, private usersService: UsersService) {}
 
   @Post('/login')
   @ApiBody({ type: LoginUserDTO })
@@ -35,24 +32,21 @@ export class AuthController {
         },
       },
       BAD_REQUEST_1: {
-        description:
-          'Returns bad request as username was not passed or is of wrong format.',
+        description: 'Returns bad request as username was not passed or is of wrong format.',
         value: {
           email: faker.internet.email(),
           password: 'password',
         },
       },
       BAD_REQUEST_2: {
-        description:
-          'Returns bad request as email was not passed or is of wrong format.',
+        description: 'Returns bad request as email was not passed or is of wrong format.',
         value: {
           username: faker.internet.userName(),
           password: 'password',
         },
       },
       BAD_REQUEST_3: {
-        description:
-          'Returns bad request as password was not passed or is of wrong format.',
+        description: 'Returns bad request as password was not passed or is of wrong format.',
         value: {
           username: faker.internet.userName(),
           email: faker.internet.email(),

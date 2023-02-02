@@ -20,9 +20,7 @@ export class UsersService {
 
     createUserDTO.password = await bcrypt.hash(createUserDTO.password, 10);
 
-    const { password, ...userWithoutPassword } = await this.userRepo.save(
-      createUserDTO,
-    );
+    const { password, ...userWithoutPassword } = await this.userRepo.save(createUserDTO);
     return userWithoutPassword;
   }
 
@@ -59,10 +57,7 @@ export class UsersService {
     if (updateUserDTO.role !== undefined) {
       user.role = updateUserDTO.role;
     }
-    const { password, ...userWithoutPassword } = await this.userRepo.save(
-      { ...user },
-      { reload: true },
-    );
+    const { password, ...userWithoutPassword } = await this.userRepo.save({ ...user }, { reload: true });
     return userWithoutPassword;
   }
 
@@ -76,9 +71,7 @@ export class UsersService {
 
   async checkUsernameAvilable(username: string): Promise<void> {
     if ((await this.userRepo.findBy({ username }))[0] !== undefined) {
-      throw new ConflictException(
-        `User with usernme ${username} already exists`,
-      );
+      throw new ConflictException(`User with usernme ${username} already exists`);
     }
     return;
   }
