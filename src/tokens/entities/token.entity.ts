@@ -1,6 +1,6 @@
 import { Column, Entity, Index, ManyToOne, PrimaryColumn } from 'typeorm';
 
-import { TimestampEntity } from 'src/utils/timestampEntity';
+import { TimestampEntity } from '../../utils/timestampEntity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity({ schema: process.env.DB_SCHEMA || 'public' })
