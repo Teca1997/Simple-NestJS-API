@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker';
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { Body } from '@nestjs/common/decorators';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { CreateUserDTO } from 'src/users/dto/create-user.dto';
-import { UsersService } from 'src/users/users.service';
+import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { LoginUserDTO } from '../users/dto/login-user.dto';
+import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
