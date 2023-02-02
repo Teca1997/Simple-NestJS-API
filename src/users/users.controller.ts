@@ -8,7 +8,6 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import {
@@ -20,7 +19,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Role } from 'src/enums/roles.enum';
 import { Roles } from 'src/roles/roles.decorator';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
@@ -28,10 +27,10 @@ import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
+@Roles(Role.Admin)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
-  @UseGuards(JwtAuthGuard)
   @ApiBody({
     type: CreateUserDTO,
     examples: {
@@ -93,8 +92,6 @@ export class UsersController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  @Roles(1, 2)
   @ApiOkResponse()
   async findAll() {
     return await this.usersService.findAll();
@@ -116,7 +113,6 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id', ParseIntPipe)
     id: number,
@@ -126,7 +122,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
   async remove(
     @Param('id', ParseIntPipe)
     id: number,

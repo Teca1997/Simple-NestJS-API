@@ -1,7 +1,9 @@
 import * as bcrypt from 'bcrypt';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -20,11 +22,14 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async login(user: User) {
+    if (user.verifiedDate == null) {
+      throw new UnauthorizedException('User did not confirm their email.');
+    }
     const payload = {
       username: user.username,
       role: user.role,
-      sub: user.userId,
+      sub: user.id,
     };
     return {
       access_token: this.jwtService.sign(payload),
