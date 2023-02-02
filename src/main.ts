@@ -15,8 +15,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('Product management API')
-    .setDescription('The product management API description')
+    .setTitle('Product management API.')
+    .setDescription('The product management API description.')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
