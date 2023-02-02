@@ -3,7 +3,7 @@ import { Column, Entity, Index, ManyToOne, PrimaryColumn } from 'typeorm';
 import { TimestampEntity } from 'src/utils/timestampEntity';
 import { User } from '../../users/entities/user.entity';
 
-@Entity()
+@Entity({ schema: process.env.DB_SCHEMA || 'public' })
 export class Token extends TimestampEntity {
   constructor(token: string, user: number) {
     super();

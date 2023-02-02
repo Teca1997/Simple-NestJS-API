@@ -11,7 +11,7 @@ import { Role } from 'src/roles/entities/role.entity';
 import { TimestampEntity } from 'src/utils/timestampEntity';
 import { Token } from 'src/tokens/entities/token.entity';
 
-@Entity({ schema: process.env.DB_DATABASE || 'public' })
+@Entity({ schema: process.env.DB_SCHEMA || 'public' })
 export class User extends TimestampEntity {
   constructor(
     username: string,
