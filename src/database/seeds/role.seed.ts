@@ -1,14 +1,16 @@
+import { RoleEnum } from '../../enums/roles.enum';
+
 export const RoleSeed = [
   {
-    name: 'Registered user',
+    name: RoleEnum.RegisteredUser,
     description: 'User that did not verify their email adress.',
   },
   {
-    name: 'Verified User',
+    name: RoleEnum.VerifiedUser,
     description: 'User that verified their email adress.',
   },
   {
-    name: 'Admin',
+    name: RoleEnum.Admin,
     description: 'System admin',
   },
 ];

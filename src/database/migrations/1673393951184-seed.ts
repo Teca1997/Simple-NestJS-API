@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcrypt';
+
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 import { Role } from '../../roles/entities/role.entity';
@@ -7,14 +9,17 @@ import { UserSeed } from '../seeds/user.seed';
 
 export class seed1673393951184 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    RoleSeed.forEach((role) => {
-      queryRunner.manager.save(new Role(role.name, role.description));
+    RoleSeed.forEach(async (role) => {
+      await queryRunner.manager.save(new Role(role.name, role.description));
     });
     /* TokenSeed.forEach((token) => {
       queryRunner.manager.save(new Token(token.token, token.user));
     }); */
-    UserSeed.forEach((user) => {
-      queryRunner.manager.save(new User(user.username, user.email, user.password, user.role!, user.verifiedDate!));
+    UserSeed.forEach(async (user) => {
+      const hashedPassword = bcrypt.hashSync(user.password, 10);
+      await queryRunner.manager.save(
+        new User(user.username, user.email, hashedPassword, user.role!, user.verifiedDate!),
+      );
     });
   }
 
