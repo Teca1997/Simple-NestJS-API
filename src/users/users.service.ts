@@ -53,8 +53,17 @@ export class UsersService {
       await this.checkUsernameAvilable(updateUserDTO.username);
       user.username = updateUserDTO.username;
     }
-
-    return await this.userRepo.save({ id, ...updateUserDTO }, { data: true });
+    if (updateUserDTO.password !== undefined) {
+      user.password = await bcrypt.hash(updateUserDTO.password, 10);
+    }
+    if (updateUserDTO.role !== undefined) {
+      user.role = updateUserDTO.role;
+    }
+    const { password, ...userWithoutPassword } = await this.userRepo.save(
+      { ...user },
+      { reload: true },
+    );
+    return userWithoutPassword;
   }
 
   async remove(id: number) {

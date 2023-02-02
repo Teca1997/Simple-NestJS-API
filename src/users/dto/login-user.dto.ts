@@ -6,7 +6,6 @@ export class LoginUserDTO {
   @ApiProperty({
     minLength: 4,
     maxLength: 15,
-    required: true,
   })
   @IsString()
   @IsNotEmpty()
@@ -17,7 +16,6 @@ export class LoginUserDTO {
   @ApiProperty({
     minLength: 8,
     maxLength: 25,
-    required: true,
   })
   @IsString()
   @IsNotEmpty()
