@@ -16,7 +16,7 @@ export const UserSeed = [
     verifiedDate: moment(),
   },
   {
-    username: 'regVerUsr',
+    username: 'regUser',
     password: '$2a$12$DcaoImQqhqiilPIImTNfO.N6lyay5BZRoypDjqMt1NhEXVygm3SnO',
     email: 'domagoj.ppp3@gmail.com',
   },

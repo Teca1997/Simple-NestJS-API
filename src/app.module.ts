@@ -26,10 +26,10 @@ import { seed1673393951184 } from './database/migrations/1673393951184-seed';
       database: process.env.DB_DATABASE?.trim() || 'postgres',
       password: process.env.DB_PASSWORD?.trim() || 'postgres',
       //schema: process.env.DB_SCHEMA || 'public',
-      dropSchema: process.env.NODE_ENV?.trim() == 'development' ? true : false,
+      //dropSchema: process.env.NODE_ENV?.trim() == 'development' ? true : false,
       synchronize: process.env.NODE_ENV?.trim() == 'development' ? true : false,
-      /* migrationsRun:
-        process.env.NODE_ENV?.trim() === 'development' ? true : false, */
+      migrationsRun:
+        process.env.NODE_ENV?.trim() === 'development' ? true : false,
       entities: [User, Role, Token],
       subscribers: [UserSubscriber],
       migrations: [seed1673393951184],
@@ -37,6 +37,9 @@ import { seed1673393951184 } from './database/migrations/1673393951184-seed';
       poolSize: 15,
       logging: process.env.NODE_ENV?.trim() === 'development' ? true : false,
     }),
+    TypeOrmModule.forFeature([Role]),
+    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Token]),
   ],
   controllers: [AppController],
   providers: [AppService],
