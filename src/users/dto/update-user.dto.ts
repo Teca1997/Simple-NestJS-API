@@ -2,8 +2,9 @@ import { IsInt, IsOptional } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateUserDTO } from './create-user.dto';
+import { PartialType } from '@nestjs/mapped-types';
 
-export class UpdateUserDTO extends CreateUserDTO {
+export class UpdateUserDTO extends PartialType(CreateUserDTO) {
   @ApiProperty({
     required: false,
     default: 1,

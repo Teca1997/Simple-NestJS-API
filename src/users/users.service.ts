@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConflictException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
@@ -16,6 +17,9 @@ export class UsersService {
   async create(createUserDTO: CreateUserDTO) {
     await this.checkEmailAvilable(createUserDTO.email);
     await this.checkUsernameAvilable(createUserDTO.username);
+
+    createUserDTO.password = await bcrypt.hash(createUserDTO.password, 10);
+
     const { password, ...userWithoutPassword } = await this.userRepo.save(
       createUserDTO,
     );
@@ -41,9 +45,16 @@ export class UsersService {
     if (user === undefined) {
       throw new NotFoundException(`User with ID ${id} was not found`);
     }
-    await this.checkEmailAvilable(updateUserDTO.email);
-    await this.checkUsernameAvilable(updateUserDTO.username);
-    await this.userRepo.update(id, updateUserDTO);
+    if (updateUserDTO.email !== undefined) {
+      await this.checkEmailAvilable(updateUserDTO.email);
+      user.email = updateUserDTO.email;
+    }
+    if (updateUserDTO.username !== undefined) {
+      await this.checkUsernameAvilable(updateUserDTO.username);
+      user.username = updateUserDTO.username;
+    }
+
+    return await this.userRepo.save({ id, ...updateUserDTO }, { data: true });
   }
 
   async remove(id: number) {
