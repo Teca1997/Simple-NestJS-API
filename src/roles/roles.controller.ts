@@ -4,12 +4,19 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RoleEnum } from 'src/enums/roles.enum';
+import { Roles } from './roles.decorator';
+import { RolesGuard } from './roles.guard';
 import { RolesService } from './roles.service';
 
 @ApiTags('roles')
 @Controller('roles')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(RoleEnum.Admin)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
   @Get()

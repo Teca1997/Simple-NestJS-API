@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import {
@@ -19,15 +20,18 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Role } from 'src/enums/roles.enum';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RoleEnum } from 'src/enums/roles.enum';
 import { Roles } from 'src/roles/roles.decorator';
+import { RolesGuard } from 'src/roles/roles.guard';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
-@Roles(Role.Admin)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(RoleEnum.Admin)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post()
