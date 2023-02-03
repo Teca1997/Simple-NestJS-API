@@ -29,6 +29,10 @@ async function bootstrap() {
     module.hot.dispose(() => app.close());
   }
 
-  console.log(greenBright(`Server listening at http://localhost:${port} as ${process.env.NODE_ENV}`));
+  console.log(
+    greenBright(
+      `Server listening port ${port} as ${process.env.NODE_ENV !== undefined ? process.env.NODE_ENV : 'development'}`,
+    ),
+  );
 }
 bootstrap();
