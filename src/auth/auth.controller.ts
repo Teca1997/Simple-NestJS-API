@@ -1,6 +1,16 @@
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { Body, Get, Param } from '@nestjs/common/decorators';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotAcceptableResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { LoginUserDTO } from '../users/dto/login-user.dto';
 import { UsersService } from '../users/users.service';
@@ -15,6 +25,10 @@ export class AuthController {
 
   @Post('/login')
   @ApiBody({ type: LoginUserDTO })
+  @ApiConflictResponse()
+  @ApiOkResponse()
+  @ApiBadRequestResponse()
+  @ApiInternalServerErrorResponse()
   @UseGuards(LocalAuthGuard)
   async login(@Request() req: any, @Body() loginUserDTO: LoginUserDTO) {
     return this.authService.login(req.user);
@@ -22,12 +36,20 @@ export class AuthController {
 
   @Post('/register')
   @ApiBody({ type: CreateUserDTO })
+  @ApiConflictResponse()
+  @ApiCreatedResponse()
+  @ApiBadRequestResponse()
+  @ApiInternalServerErrorResponse()
   async register(@Body() createUserDTO: CreateUserDTO) {
     return this.usersService.create(createUserDTO);
   }
 
   @Get('/email/verify/:token')
-  async verifyEmail(@Param('token', JwtValidationPipe) token: Object) {
+  @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  @ApiNotFoundResponse()
+  @ApiNotAcceptableResponse()
+  async verifyEmail(@Param('token', JwtValidationPipe) token: any) {
     console.log(token);
     return token;
   }
