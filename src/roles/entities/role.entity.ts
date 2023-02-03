@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { TimestampEntity } from 'src/utils/timestampEntity';
-import { User } from 'src/users/entities/user.entity';
+import { TimestampEntity } from '../../utils/timestampEntity';
+import { User } from '../../users/entities/user.entity';
 
-@Entity({ schema: process.env.DB_DATABASE || 'public' })
+@Entity({ schema: process.env.DB_SCHEMA || 'public' })
 export class Role extends TimestampEntity {
   constructor(name: string, description: string) {
     super();

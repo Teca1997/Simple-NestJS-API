@@ -1,49 +1,54 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RoleEnum } from '../enums/roles.enum';
+import { Roles } from '../roles/decorators/roles.decorator';
+import { RolesGuard } from '../roles/guards/roles.guard';
+import { CreateUserDTO } from './dto/create-user.dto';
+import { UpdateUserDTO } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(RoleEnum.Admin)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
   @Post()
-  @ApiBody({ type: CreateUserDto })
-  async create(@Body() createUserDto: CreateUserDto) {
+  @ApiBody({ type: CreateUserDTO })
+  async create(@Body() createUserDto: CreateUserDTO) {
     return await this.usersService.create(createUserDto);
   }
 
   @Get()
+  @ApiOkResponse()
   async findAll() {
     return await this.usersService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse()
+  @ApiNotFoundResponse()
+  @ApiBadRequestResponse()
   async findOne(
     @Param('id', ParseIntPipe)
     id: number,
   ) {
-    return await this.usersService.findOneById(id);
+    const user = this.usersService.findOneById(id);
+    if (user === undefined) {
+      throw new NotFoundException(`User with ID ${id} was not found`);
+    }
+    return user;
   }
 
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe)
     id: number,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDTO: UpdateUserDTO,
   ) {
-    return await this.usersService.update(id, updateUserDto);
+    return await this.usersService.update(id, updateUserDTO);
   }
 
   @Delete(':id')
