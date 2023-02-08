@@ -1,6 +1,27 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes';
-import { ApiBadRequestResponse, ApiBody, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotAcceptableResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleEnum } from '../enums/roles.enum';
 import { Roles } from '../roles/decorators/roles.decorator';
@@ -29,10 +50,13 @@ export class UsersController {
 
   @Get(':id')
   @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
   @ApiNotFoundResponse()
-  @ApiBadRequestResponse()
+  @ApiNotAcceptableResponse()
   async findOne(
-    @Param('id', ParseIntPipe)
+    @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }))
     id: number,
   ) {
     const user = this.usersService.findOneById(id);
@@ -43,8 +67,15 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  @ApiNotFoundResponse()
+  @ApiBadRequestResponse()
+  @ApiNotAcceptableResponse()
   async update(
-    @Param('id', ParseIntPipe)
+    @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }))
     id: number,
     @Body() updateUserDTO: UpdateUserDTO,
   ) {
@@ -52,6 +83,12 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  @ApiNotFoundResponse()
+  @ApiNotAcceptableResponse()
   async remove(
     @Param('id', ParseIntPipe)
     id: number,

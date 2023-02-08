@@ -1,5 +1,14 @@
 import { Controller, Get, HttpStatus, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotAcceptableResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleEnum } from '../enums/roles.enum';
 import { Roles } from './decorators/roles.decorator';
@@ -13,11 +22,22 @@ import { RolesService } from './roles.service';
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
   @Get()
+  @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  @ApiBadRequestResponse()
   findAll() {
     return this.rolesService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse()
+  @ApiInternalServerErrorResponse()
+  @ApiForbiddenResponse()
+  @ApiUnauthorizedResponse()
+  @ApiNotFoundResponse()
+  @ApiNotAcceptableResponse()
   findOne(
     @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }))
     id: number,

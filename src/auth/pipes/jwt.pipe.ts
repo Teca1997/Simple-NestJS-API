@@ -3,6 +3,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotAcceptableException,
   PipeTransform,
 } from '@nestjs/common';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
@@ -12,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class JwtValidationPipe implements PipeTransform {
   constructor(private jwtService: JwtService) {}
-  transform(value: any, metadata: ArgumentMetadata) {
+  transform(value: any, metadata: ArgumentMetadata): any {
     try {
       const result = this.jwtService.verify(value, {
         secret: process.env.JWT_SECRET_ACCESS?.trim() || 'secret_key',
@@ -21,7 +22,7 @@ export class JwtValidationPipe implements PipeTransform {
       return result;
     } catch (err) {
       if (err instanceof JsonWebTokenError) {
-        throw new BadRequestException('Token malformed');
+        throw new NotAcceptableException('Token malformed');
       } else if (err instanceof TokenExpiredError) {
         throw new BadRequestException('Token expired');
       } else {
