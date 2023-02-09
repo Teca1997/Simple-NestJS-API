@@ -24,9 +24,7 @@ export class AuthService {
       throw new UnauthorizedException('User did not confirm their email.');
     }
     const payload = {
-      username: user.username,
-      role: user.role,
-      sub: user.id,
+      sub: user,
     };
     return {
       access_token: this.jwtService.sign(payload),
