@@ -30,6 +30,9 @@ export class User extends TimestampEntity {
   @Column({ type: 'timestamptz', nullable: true })
   verifiedDate?: Moment;
 
+  @Column({ type: 'text', nullable: true })
+  refreshToken?: string;
+
   @Column({ type: 'number', name: 'roleId', default: 1 })
   @ManyToOne(() => Role, (role) => role.users, { nullable: false, eager: true })
   role?: Role | number;

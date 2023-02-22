@@ -16,11 +16,11 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 }
 
 const updateVerifiedDate = async (user: ObjectLiteral) => {
-  console.log('user');
-  console.log(user);
-  if (user.role > 1) {
+  if (user.role != undefined) return;
+  if (user.role.id > 1) {
     user.verifiedDate = moment();
   } else {
     user.verifiedDate = null;
   }
+  console.log(user);
 };

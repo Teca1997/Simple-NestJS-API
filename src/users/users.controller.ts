@@ -22,7 +22,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AccessTokenGuard } from '../common/guards/accessToken.guard';
 import { RoleEnum } from '../enums/roles.enum';
 import { Roles } from '../roles/decorators/roles.decorator';
 import { RolesGuard } from '../roles/guards/roles.guard';
@@ -32,7 +32,7 @@ import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(AccessTokenGuard, RolesGuard)
 @Roles(RoleEnum.Admin)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

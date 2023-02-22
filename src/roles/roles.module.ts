@@ -1,4 +1,4 @@
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { Module } from '@nestjs/common';
 import { Role } from './entities/role.entity';

@@ -14,6 +14,7 @@ export class UpdateUserDTO extends PartialType(CreateUserDTO) {
   @IsString()
   @IsEmail()
   @IsNotEmpty()
+  @IsOptional()
   email?: string;
 
   @ApiProperty({
@@ -21,6 +22,7 @@ export class UpdateUserDTO extends PartialType(CreateUserDTO) {
     maxLength: 15,
     required: false,
   })
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MinLength(4)
@@ -32,9 +34,14 @@ export class UpdateUserDTO extends PartialType(CreateUserDTO) {
     maxLength: 25,
     required: false,
   })
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
   @MaxLength(25)
   password?: string;
+
+  @IsString()
+  @IsOptional()
+  refreshToken?: string | null;
 }
