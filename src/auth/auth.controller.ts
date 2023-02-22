@@ -1,4 +1,4 @@
-import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { Body, Get, Param } from '@nestjs/common/decorators';
 import {
   ApiBadRequestResponse,
@@ -11,11 +11,13 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AccessTokenGuard } from '../common/guards/accessToken.guard';
+import { LocalAuthGuard } from '../common/guards/local-auth.guard';
+import { RefreshTokenGuard } from '../common/guards/refreshToken.guard';
 import { CreateUserDTO } from '../users/dto/create-user.dto';
 import { LoginUserDTO } from '../users/dto/login-user.dto';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtValidationPipe } from './pipes/jwt.pipe';
 
 @ApiTags('auth')
@@ -30,8 +32,21 @@ export class AuthController {
   @ApiBadRequestResponse()
   @ApiInternalServerErrorResponse()
   @UseGuards(LocalAuthGuard)
-  async login(@Request() req: any, @Body() loginUserDTO: LoginUserDTO) {
-    return this.authService.login(req.user);
+  async login(@Req() req: any, @Body() loginUserDTO: LoginUserDTO) {
+    return await this.authService.login(req.user);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('logout')
+  async logout(@Req() req: any) {
+    return await this.authService.logout(req.user.sub.id);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  refreshTokens(@Req() req: any) {
+    const userId = req.user.sub.id;
+    return this.authService.refreshTokens(userId);
   }
 
   @Post('/register')

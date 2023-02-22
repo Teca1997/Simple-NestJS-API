@@ -20,7 +20,7 @@ export class UsersService {
 
     createUserDTO.password = await bcrypt.hash(createUserDTO.password, 10);
 
-    const { password, ...userWithoutPassword } = await this.userRepo.save(createUserDTO);
+    const { password, refreshToken, ...userWithoutPassword } = await this.userRepo.save(createUserDTO);
     return userWithoutPassword;
   }
 
@@ -40,6 +40,7 @@ export class UsersService {
 
   async update(id: number, updateUserDTO: UpdateUserDTO) {
     const user = await this.findOneById(id);
+
     if (user === undefined) {
       throw new NotFoundException(`User with ID ${id} was not found`);
     }
@@ -57,7 +58,10 @@ export class UsersService {
     if (updateUserDTO.role !== undefined) {
       user.role = updateUserDTO.role;
     }
-    const { password, ...userWithoutPassword } = await this.userRepo.save({ ...user }, { reload: true });
+    if (updateUserDTO.refreshToken !== undefined) {
+      user.refreshToken = updateUserDTO.refreshToken!;
+    }
+    const { password, refreshToken, ...userWithoutPassword } = await this.userRepo.save({ ...user }, { reload: true });
     return userWithoutPassword;
   }
 
