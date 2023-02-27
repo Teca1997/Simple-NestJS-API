@@ -2,6 +2,7 @@ import { Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { Body, Get, Param } from '@nestjs/common/decorators';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -26,7 +27,18 @@ export class AuthController {
   constructor(private authService: AuthService, private usersService: UsersService) {}
 
   @Post('/login')
-  @ApiBody({ type: LoginUserDTO })
+  @ApiBody({
+    type: LoginUserDTO,
+    examples: {
+      good: {
+        description: 'desc',
+        value: {
+          username: 'admin',
+          password: 'password',
+        },
+      },
+    },
+  })
   @ApiConflictResponse()
   @ApiOkResponse()
   @ApiBadRequestResponse()
@@ -36,12 +48,14 @@ export class AuthController {
     return await this.authService.login(req.user);
   }
 
+  @ApiBearerAuth('access-token')
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   async logout(@Req() req: any) {
     return await this.authService.logout(req.user.sub.id);
   }
 
+  @ApiBearerAuth('refresh-token')
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   refreshTokens(@Req() req: any) {

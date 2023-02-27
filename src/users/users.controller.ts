@@ -13,6 +13,7 @@ import {
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
@@ -22,15 +23,16 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { Roles } from '../common/decorators/roles.decorator';
 import { AccessTokenGuard } from '../common/guards/accessToken.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
 import { RoleEnum } from '../enums/roles.enum';
-import { Roles } from '../roles/decorators/roles.decorator';
-import { RolesGuard } from '../roles/guards/roles.guard';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
+@ApiBearerAuth('access-token')
 @Controller('users')
 @UseGuards(AccessTokenGuard, RolesGuard)
 @Roles(RoleEnum.Admin)
@@ -59,7 +61,7 @@ export class UsersController {
     @Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }))
     id: number,
   ) {
-    const user = this.usersService.findOneById(id);
+    const user = await this.usersService.findOneById(id);
     if (user === undefined) {
       throw new NotFoundException(`User with ID ${id} was not found`);
     }
