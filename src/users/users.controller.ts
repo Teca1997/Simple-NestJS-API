@@ -13,6 +13,7 @@ import {
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
@@ -31,6 +32,7 @@ import { UpdateUserDTO } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
+@ApiBearerAuth('access-token')
 @Controller('users')
 @UseGuards(AccessTokenGuard, RolesGuard)
 @Roles(RoleEnum.Admin)

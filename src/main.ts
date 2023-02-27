@@ -15,12 +15,45 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
+    .addBearerAuth(undefined, 'access-token')
+    .addBearerAuth(undefined, 'refresh-token')
     .setTitle('Product management API.')
     .setDescription('The product management API description.')
     .setVersion('1.0')
     .build();
+
+  const options = {
+    swaggerOptions: {
+      authAction: {
+        'access-token': {
+          name: 'access-token',
+          schema: {
+            description: 'Default',
+            type: 'http',
+            in: 'header',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+          value:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiZG9tYWdvai5wcHAxQGdtYWlsLmNvbSIsInJvbGUiOnsibmFtZSI6IkFkbWluIiwiZGVzY3JpcHRpb24iOiJTeXN0ZW0gYWRtaW4iLCJpZCI6M30sInZlcmlmaWVkRGF0ZSI6IjIwMjMtMDItMjJUMTk6MDU6MjUuODg5WiIsImlkIjoxfSwiaWF0IjoxNjc3NTA3MzQ0LCJleHAiOjE2Nzc1MDgyNDR9.RcXFBuxAT4sJbHSNbAYKoIOoTteCSQuGDOUtJUqLY-U',
+        },
+        'refresh-token': {
+          name: 'refresh-token',
+          schema: {
+            description: 'Default',
+            type: 'http',
+            in: 'header',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+          },
+          value:
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiZG9tYWdvai5wcHAxQGdtYWlsLmNvbSIsInJvbGUiOnsibmFtZSI6IkFkbWluIiwiZGVzY3JpcHRpb24iOiJTeXN0ZW0gYWRtaW4iLCJpZCI6M30sInZlcmlmaWVkRGF0ZSI6IjIwMjMtMDItMjJUMTk6MDU6MjUuODg5WiIsImlkIjoxfSwiaWF0IjoxNjc3NTA3MzQ0LCJleHAiOjE2NzgxMTIxNDR9.V9qKGPgnXXFHL9nTyJgYzBzCiCDU-R95TWWEioNrKtE',
+        },
+      },
+    },
+  };
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('', app, document);
+  SwaggerModule.setup('', app, document, options);
 
   await app.listen(3000);
 

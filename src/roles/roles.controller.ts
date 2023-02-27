@@ -1,6 +1,7 @@
 import { Controller, Get, HttpStatus, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNotAcceptableResponse,
@@ -16,6 +17,7 @@ import { RoleEnum } from '../enums/roles.enum';
 import { RolesService } from './roles.service';
 
 @ApiTags('roles')
+@ApiBearerAuth('access-token')
 @Controller('roles')
 @UseGuards(AccessTokenGuard, RolesGuard)
 @Roles(RoleEnum.Admin)
