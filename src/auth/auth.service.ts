@@ -38,10 +38,6 @@ export class AuthService {
     return res;
   }
 
-  /* hashData(data: string) {
-    return argon2.hash(data);
-  } */
-
   async updateRefreshToken(userId: number, refreshToken: string) {
     //const hashedRefreshToken = await this.hashData(refreshToken);
     await this.usersService.update(userId, {
