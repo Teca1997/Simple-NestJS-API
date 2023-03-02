@@ -21,5 +21,5 @@ export const databaseConfig: DataSource = new DataSource({
   migrations: [seed1673393951184],
   logger: 'advanced-console',
   poolSize: 15,
-  logging: process.env.NODE_ENV?.trim() === 'development' ? true : false,
+  logging: process.env.NODE_ENV?.trim() === 'development' ? false : true,
 });

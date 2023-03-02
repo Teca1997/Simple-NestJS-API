@@ -51,10 +51,10 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiOkResponse()
+  @ApiOkResponse({ description: 'dahwiud' })
   @ApiInternalServerErrorResponse()
   @ApiForbiddenResponse()
-  @ApiUnauthorizedResponse()
+  @ApiUnauthorizedResponse({ description: 'Happens when user does not have authorization to access content.' })
   @ApiNotFoundResponse()
   @ApiNotAcceptableResponse()
   async findOne(

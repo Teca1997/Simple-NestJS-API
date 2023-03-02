@@ -27,18 +27,7 @@ export class AuthController {
   constructor(private authService: AuthService, private usersService: UsersService) {}
 
   @Post('/login')
-  @ApiBody({
-    type: LoginUserDTO,
-    examples: {
-      good: {
-        description: 'desc',
-        value: {
-          username: 'admin',
-          password: 'password',
-        },
-      },
-    },
-  })
+  @ApiBody({ type: LoginUserDTO })
   @ApiConflictResponse()
   @ApiOkResponse()
   @ApiBadRequestResponse()

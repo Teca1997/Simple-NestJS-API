@@ -23,17 +23,15 @@ export class AuthService {
     if (user.verifiedDate == null) {
       throw new UnauthorizedException('User did not confirm their email.');
     }
-    console.log(user);
 
     const tokens = await this.getTokens(user);
 
     await this.updateRefreshToken(user.id!, tokens.refreshToken);
-    return tokens;
+    return { tokens, user };
   }
 
   async logout(userId: number) {
     const res = await this.usersService.update(userId, { refreshToken: null });
-    console.log(res);
 
     return res;
   }
