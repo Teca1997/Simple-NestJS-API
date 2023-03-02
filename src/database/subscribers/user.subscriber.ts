@@ -22,5 +22,4 @@ const updateVerifiedDate = async (user: ObjectLiteral) => {
   } else {
     user.verifiedDate = null;
   }
-  console.log(user);
 };
