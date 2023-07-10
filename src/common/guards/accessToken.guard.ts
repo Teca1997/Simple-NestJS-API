@@ -13,9 +13,9 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
   handleRequest(err: any, user: any, info: any) {
     if (!user) {
       if (err !== null) {
-        throw new UnauthorizedException(err);
+        throw new UnauthorizedException(err.message);
       }
-      throw new UnauthorizedException(info);
+      throw new UnauthorizedException(info.message);
     }
     return user;
   }

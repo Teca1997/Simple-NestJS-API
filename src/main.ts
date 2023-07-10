@@ -1,10 +1,10 @@
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 
+import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { greenBright } from 'colorette';
 import { AppModule } from './app.module';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { greenBright } from 'colorette';
 
 const port = parseInt(process.env.PORT || '3000', 10);
 
@@ -19,12 +19,13 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .addBearerAuth(undefined, 'access-token')
     .addBearerAuth(undefined, 'refresh-token')
-    .setTitle('Product management API.')
+    .setTitle('Product management API')
     .setDescription('The product management API description.')
     .setVersion('1.0')
+    .setExternalDoc('Postman Collection', '/docs-json')
     .build();
 
-  const options = {
+  const options: SwaggerCustomOptions = {
     swaggerOptions: {
       authAction: {
         'access-token': {
@@ -55,7 +56,7 @@ async function bootstrap() {
     },
   };
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('', app, document, options);
+  SwaggerModule.setup('/docs', app, document, options);
 
   await app.listen(3000);
 
