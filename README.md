@@ -1,73 +1,182 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Simple-NestJS-API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A modular, scalable RESTful API boilerplate built with [NestJS](https://nestjs.com/) and TypeScript. This project is designed for real-world applications—focusing on best practices, maintainability, and extensibility.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Table of Contents
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Features](#features)
+- [Architecture Overview](#architecture-overview)
+- [Modules](#modules)
+  - [Auth](#auth)
+  - [Users](#users)
+  - [Roles](#roles)
+  - [Tokens](#tokens)
+- [Getting Started](#getting-started)
+- [Scripts](#scripts)
+- [Testing](#testing)
+- [Configuration and Tooling](#configuration-and-tooling)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Installation
+---
 
-```bash
-$ yarn install
+## Features
+
+- **NestJS Framework:** Enjoy modular architecture, dependency injection, and a powerful CLI.
+- **TypeScript:** Type safety and modern language features.
+- **Authentication & Authorization:** Ready-to-extend modules for Auth, Roles, and Tokens.
+- **User Management:** Full-featured user module with DTOs and entity separation.
+- **Testing:** Built-in support for unit and integration tests (Jest).
+- **Code Quality:** Integrated ESLint, Prettier, and strict TS configs.
+- **Extensible:** Easy to add new modules and features.
+
+---
+
+## Architecture Overview
+
+```
+src/
+├── app.controller.ts
+├── app.module.ts
+├── app.service.ts
+├── main.ts
+├── auth/
+├── users/
+├── roles/
+├── tokens/
+├── common/
+├── enums/
+├── database/
+├── utils/
 ```
 
-## Running the app
+- **app.module.ts:** Root module, imports and configures all feature modules.
+- **main.ts:** Application bootstrap file.
+- **common, enums, database, utils:** Utility modules, helpers, and shared code.
+
+---
+
+## Modules
+
+### Auth
+
+Handles authentication logic.
+
+- **Controller:** [`auth.controller.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/auth/auth.controller.ts) — defines authentication endpoints (e.g., login, registration).
+- **Service:** [`auth.service.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/auth/auth.service.ts) — contains business logic for authentication, token management, etc.
+- **Module:** [`auth.module.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/auth/auth.module.ts) — encapsulates the auth domain.
+- **Strategies & Pipes:** Extensible for custom authentication strategies and request validation.
+
+### Users
+
+User management (CRUD operations, registration, lookup).
+
+- **Controller:** [`users.controller.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/users/users.controller.ts) — handles user-related API endpoints.
+- **Service:** [`users.service.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/users/users.service.ts) — user logic and data access.
+- **Module:** [`users.module.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/users/users.module.ts)
+- **DTOs:** Located in [`src/users/dto/`](https://github.com/Teca1997/Simple-NestJS-API/tree/development/src/users/dto) for request validation.
+- **Entities:** Located in [`src/users/entities/`](https://github.com/Teca1997/Simple-NestJS-API/tree/development/src/users/entities) for ORM/database mapping.
+
+### Roles
+
+Role-based access control.
+
+- **Controller:** [`roles.controller.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/roles/roles.controller.ts) — endpoints for managing roles.
+- **Service:** [`roles.service.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/roles/roles.service.ts) — logic for roles and permissions.
+- **Module:** [`roles.module.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/roles/roles.module.ts)
+- **Entities:** Located in [`src/roles/entities/`](https://github.com/Teca1997/Simple-NestJS-API/tree/development/src/roles/entities)
+
+### Tokens
+
+Session and refresh token management.
+
+- **Service:** [`tokens.service.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/tokens/tokens.service.ts)
+- **Module:** [`tokens.module.ts`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/src/tokens/tokens.module.ts)
+- **Entities:** Located in [`src/tokens/entities/`](https://github.com/Teca1997/Simple-NestJS-API/tree/development/src/tokens/entities)
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js (LTS recommended)
+- Yarn or npm
+
+### Installation
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+yarn install
+# or
+npm install
 ```
 
-## Test
+### Running the API
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn start:dev
+# or
+npm run start:dev
 ```
 
-## Support
+API will be available by default at `http://localhost:3000`.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## Scripts
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Common scripts (see [`package.json`](https://github.com/Teca1997/Simple-NestJS-API/blob/development/package.json)):
+
+- **`start:dev`** – Run in development mode with hot reload.
+- **`build`** – Compile TypeScript.
+- **`lint`** – Lint code with ESLint.
+- **`test`** – Run unit tests.
+- **`test:e2e`** – Run end-to-end tests.
+- **`format`** – Auto-format code using Prettier.
+
+---
+
+## Testing
+
+- **Unit and Integration:** Jest is preconfigured; test specs are co-located with code.
+- **Run tests:**
+  ```bash
+  yarn test
+  yarn test:e2e
+  ```
+
+---
+
+## Configuration and Tooling
+
+- **ESLint:** `.eslintrc.js` defines linting rules.
+- **Prettier:** `.prettierrc` manages code style.
+- **Jest:** `jest.config.ts` for testing.
+- **Nest CLI:** `nest-cli.json` for project structure.
+- **Webpack:** `webpack.config.ts` for builds.
+- **TypeScript:** `tsconfig.json` and `tsconfig.build.json`.
+
+---
+
+## Contributing
+
+1. Fork the repository and clone your fork.
+2. Create a new branch for your feature or fix.
+3. Open a Pull Request with clear description.
+
+---
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+Specify your project license here.
+
+---
+
+**Note:**  
+- This README covers the main structure and features, but more modules may exist.  
+- See the [`src/`](https://github.com/Teca1997/Simple-NestJS-API/tree/development/src) directory for all features and endpoints.
+
+---
+
+*Generated by GitHub Copilot based on the current file structure and best practices. For more details, explore the code and module contents!*
